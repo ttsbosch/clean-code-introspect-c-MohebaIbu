@@ -3,12 +3,7 @@
 #include <string.h>
 #include <errno.h>
 
-typedef struct {
-    char SrcCurrency[256]; 
-    char DestCurrency[256]; 
-    float Lots;
-    double Price;
-} TradeRecords;
+
 
 
 char** performStringSeperation(const char* inputString, char inputDelimiter) {
