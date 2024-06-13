@@ -1,4 +1,10 @@
+#ifndef STRINGHELPERS_H
+#define STRINGHELPERS_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 
 char** performStringSeperation(const char* inputString, char inputDelimiter) {
     int characterCounter = 0;
