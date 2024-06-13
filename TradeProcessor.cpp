@@ -4,118 +4,118 @@
 #include <errno.h>
 
 typedef struct {
-    char SC[256]; // SourceCurrency
-    char DC[256]; // DestibationCurrency
+    char SrcCurrency[256]; 
+    char DestCurrency[256]; 
     float Lots;
     double Price;
-} TR;
+} TradeRecords;
 
 
-char** SplitString(const char* str, char delimiter) {
-    int count = 0;
-    const char* ptr = str;
-    while (*ptr != '\0') {
-        if (*ptr++ == delimiter) {
-            count++;
+char** performStringSeperation(const char* inputString, char inputDelimiter) {
+    int characterCounter = 0;
+    const char* inputStringPtr = inputString;
+    while (*inputStringPtr != '\0') {
+        if (*inputStringPtr++ == inputStringPtr) {
+            characterCounter++;
         }
     }
 
-    char** tokens = (char**)malloc(sizeof(char*) * (count + 2));
+    char** seperatedString = (char**)malloc(sizeof(char*) * (characterCounter + 2));
     int i = 0;
-    ptr = str;
-    char* token = (char*)malloc(strlen(str) + 1);
+    inputStringPtr = inputString;
+    char* token = (char*)malloc(strlen(inputString) + 1);
     int j = 0;
-    while (*ptr != '\0') {
-        if (*ptr == delimiter) {
+    while (*inputStringPtr != '\0') {
+        if (*inputStringPtr == inputDelimiter) {
             token[j] = '\0';
-            tokens[i++] = strdup(token);
+            seperatedString[i++] = strdup(token);
             j = 0;
         } else {
-            token[j++] = *ptr;
+            token[j++] = *inputStringPtr;
         }
-        ptr++;
+        inputStringPtr++;
     }
     token[j] = '\0';
-    tokens[i++] = strdup(token);
-    tokens[i] = NULL;
+    seperatedString[i++] = strdup(token);
+    seperatedString[i] = NULL;
     free(token);
-    return tokens;
+    return seperatedString;
 }
 
 
-int intGetFromString(const char* str, int* value) {
+int tryToConvertStringToInt(const char* inputString, int* integerValue) {
     char* endptr;
-    *value = strtol(str, &endptr, 10);
-    if (endptr == str) {
+    *integerValue = strtol(inputString, &endptr, 10);
+    if (endptr == inputString) {
         return 0;
     }
     return 1;
 }
 
-int toDouble(const char* str, double* value) {
+int tryToConvertStringToDecimal(const char* inputString, double* decimalValue) {
     char* endptr;
-    *value = strtod(str, &endptr);
-    if (endptr == str) {
+    *decimalValue = strtod(inputString, &endptr);
+    if (endptr == inputString) {
         return 0;
     }
     return 1;
 }
 
-void Process(FILE* stream) {
-    char line[1024];
-    TR objects[1024];
+void convertCsvToXmlFile(FILE* csvfilestream) {
+    char csvfileline[1024];
+    TradeRecords records[1024];
     int lineCount = 0;
-    int objectCount = 0;
+    int recordCount = 0;
 
-    while (fgets(line, sizeof(line), stream)) {
-        char* fields[3];
-        int fieldCount = 0;
-        char* token = strtok(line, ",");
+    while (fgets(csvfileline, sizeof(csvfileline), csvfilestream)) {
+        char* csvFileFields[3];
+        int csvFieldCount = 0;
+        char* token = strtok(csvfileline, ",");
         while (token != NULL) {
-            fields[fieldCount++] = token;
+            csvFileFields[csvFieldCount++] = token;
             token = strtok(NULL, ",");
         }
 
-        if (fieldCount != 3) {
-            fprintf(stderr, "WARN: Line %d malformed. Only %d field(s) found.\n", lineCount + 1, fieldCount);
+        if (csvFieldCount != 3) {
+            fprintf(stderr, "WARN: Line %d malformed. Only %d field(s) found.\n", lineCount + 1, csvFieldCount);
             continue;
         }
 
-        if (strlen(fields[0]) != 6) {
-            fprintf(stderr, "WARN: Trade currencies on line %d malformed: '%s'\n", lineCount + 1, fields[0]);
+        if (strlen(csvFileFields[0]) != 6) {
+            fprintf(stderr, "WARN: Trade currencies on line %d malformed: '%s'\n", lineCount + 1, csvFileFields[0]);
             continue;
         }
 
-        int tam;
-        if (!intGetFromString(fields[1], &tam)) {
-            fprintf(stderr, "WARN: Trade amount on line %d not a valid integer: '%s'\n", lineCount + 1, fields[1]);
+        int tradeAmount;
+        if (!tryToConvertStringToInt(csvFileFields[1], &tradeAmount)) {
+            fprintf(stderr, "WARN: Trade amount on line %d not a valid integer: '%s'\n", lineCount + 1, csvFileFields[1]);
         }
 
-        double tp;
-        if (!toDouble(fields[2], &tp)) {
-            fprintf(stderr, "WARN: Trade price on line %d not a valid decimal: '%s'\n", lineCount + 1, fields[2]);
+        double tradePrice;
+        if (!tryToConvertStringToDecimal(csvFileFields[2], &tradePrice)) {
+            fprintf(stderr, "WARN: Trade price on line %d not a valid decimal: '%s'\n", lineCount + 1, csvFileFields[2]);
         }
 
-        strncpy(objects[objectCount].SC, fields[0], 3);
-        strncpy(objects[objectCount].DC, fields[0] + 3, 3);
-        objects[objectCount].Lots = tam / LotSize;
-        objects[objectCount].Price = tp;
-        objectCount++;
+        strncpy(records[recordCount].SrcCurrency, csvFileFields[0], 3);
+        strncpy(records[recordCount].DestCurrency, csvFileFields[0] + 3, 3);
+        records[recordCount].Lots = tradeAmount / LotSize;
+        records[recordCount].Price = tradePrice;
+        recordCount++;
         lineCount++;
     }
 
-    FILE* outFile = fopen("output.xml", "w");
-    fprintf(outFile, "<TradeRecords>\n");
-    for (int i = 0; i < objectCount; i++) {
-        fprintf(outFile, "\t<TradeRecord>\n");
-        fprintf(outFile, "\t\t<SourceCurrency>%s</SourceCurrency>\n", objects[i].SC);
-        fprintf(outFile, "\t\t<DestinationCurrency>%s</DestinationCurrency>\n", objects[i].DC);
-        fprintf(outFile, "\t\t<Lots>%d</Lots>\n", objects[i].Lots);
-        fprintf(outFile, "\t\t<Price>%f</Price>\n", objects[i].Price);
-        fprintf(outFile, "\t</TradeRecord>\n");
+    FILE* outputXmlFile = fopen("output.xml", "w");
+    fprintf(outputXmlFile, "<TradeRecords>\n");
+    for (int recordIndex = 0; recordIndex < recordCount; recordIndex++) {
+        fprintf(outputXmlFile, "\t<TradeRecord>\n");
+        fprintf(outputXmlFile, "\t\t<SourceCurrency>%s</SourceCurrency>\n", records[recordIndex].SrcCurrency);
+        fprintf(outputXmlFile, "\t\t<DestinationCurrency>%s</DestinationCurrency>\n", records[recordIndex].DestCurrency);
+        fprintf(outputXmlFile, "\t\t<Lots>%d</Lots>\n", records[recordIndex].Lots);
+        fprintf(outputXmlFile, "\t\t<Price>%f</Price>\n", records[recordIndex].Price);
+        fprintf(outputXmlFile, "\t</TradeRecord>\n");
     }
-    fprintf(outFile, "</TradeRecords>");
-    fclose(outFile);
-    printf("INFO: %d trades processed\n", objectCount);
+    fprintf(outputXmlFile, "</TradeRecords>");
+    fclose(outputXmlFile);
+    printf("INFO: %d trades processed\n", recordCount);
 }
 
