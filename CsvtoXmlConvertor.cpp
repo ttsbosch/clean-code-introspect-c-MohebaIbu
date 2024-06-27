@@ -6,6 +6,7 @@
 #include "DataTypeConvertor.h"
 #include "StringHelpers.h"
 #include "logger.h"
+#include "IO_Operation.h"
 
 
 void convertCsvToXmlFile(FILE* csvfilestream) {
