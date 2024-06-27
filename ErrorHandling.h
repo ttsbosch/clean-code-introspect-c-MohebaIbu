@@ -2,18 +2,10 @@
 #define ERRORHANDLING_H
 #include "DataTypeConvertor.h"
 #include "logger.h"
-#define true 1
-#define false 0
-typedef int bool;
+#include <errno.h>
 
 
-void performErrorChecks(int csvFieldCount,int lineCount ,char *csvFileFields[3] )
-{
-  checkFieldCountAsSpecified(csvFieldCount,lineCount,3);
-  checkLengthOfieldsAsSpecified(csvFileFields,lineCount,6);
-  checkGivenVaribleIsInt(csvFileFields,lineCount);
-  checkGivenVaraibleIsDouble(csvFileFields,lineCount);
-}
+
 
 void  checkFieldCountAsSpecified (int csvFieldCount,int lineCount,int refCountValue)
 {
@@ -46,6 +38,14 @@ void  checkGivenVaraibleIsDouble (char *csvFileFields[3],int lineCount)
   {
     log_warn(stderr, "WARN: Trade price on line %d not a valid decimal: '%s'\n", lineCount + 1, csvFileFields[2]);
   }
+}
+
+void performErrorChecks(int csvFieldCount,int lineCount ,char *csvFileFields[3] )
+{
+  checkFieldCountAsSpecified(csvFieldCount,lineCount,3);
+  checkLengthOfieldsAsSpecified(csvFileFields,lineCount,6);
+  checkGivenVaribleIsInt(csvFileFields,lineCount);
+  checkGivenVaraibleIsDouble(csvFileFields,lineCount);
 }
 
 
