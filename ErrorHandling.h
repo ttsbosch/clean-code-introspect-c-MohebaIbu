@@ -1,8 +1,9 @@
 #ifndef ERRORHANDLING_H
 #define ERRORHANDLING_H
+#include <errno.h>
 #include "DataTypeConvertor.h"
 #include "logger.h"
-#include <errno.h>
+
 
 
 
@@ -11,15 +12,15 @@ void  checkFieldCountAsSpecified (int csvFieldCount,int lineCount,int refCountVa
 {
   if (csvFieldCount != refCountValue) {
             log_warn(stderr, "WARN: Line %d malformed. Only %d field(s) found.\n", lineCount + 1, csvFieldCount);
-            continue;
+            
         }
 }
 
-void  checkLengthOfieldsAsSpecified (char *csvFileFields[3],int lineCount,refFieldLength)
+void  checkLengthOfieldsAsSpecified (char *csvFileFields[3],int lineCount,int refFieldLength)
 {
    if (strlen(csvFileFields[0]) != refFieldLength) {
             log_warn(stderr, "WARN: Trade currencies on line %d malformed: '%s'\n", lineCount + 1, csvFileFields[0]);
-            continue;
+            
         }
 }
 
