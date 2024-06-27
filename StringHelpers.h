@@ -10,7 +10,7 @@ char** performStringSeperation(const char* inputString, char inputDelimiter) {
     int characterCounter = 0;
     const char* inputStringPtr = inputString;
     while (*inputStringPtr != '\0') {
-        if (*inputStringPtr == inputStringPtr) {
+        if (*inputStringPtr == inputDelimiter) {
             characterCounter++;
         }
         inputStringPtr++;
