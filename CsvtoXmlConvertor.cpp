@@ -5,7 +5,6 @@
 #include "DataTypeConvertor.h"
 #include "logger.h"
 #include "TradeRecord.h"
-#include "ErrorHandling.h"
 #include "StringHelpers.h"
 #include "IO_Operation.h"
 
