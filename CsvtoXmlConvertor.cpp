@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <stdarg.h>
 #include "DataTypeConvertor.h"
 #include "logger.h"
 #include "TradeRecord.h"
