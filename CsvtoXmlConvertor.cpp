@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include "TradeRecord.h"
 
 void convertCsvToXmlFile(FILE* csvfilestream) {
     char csvfileline[1024];
