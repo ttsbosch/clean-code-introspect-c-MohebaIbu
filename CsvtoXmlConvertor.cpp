@@ -3,6 +3,8 @@
 #include <string.h>
 #include <errno.h>
 #include "TradeRecord.h"
+#include "DataTypeConvertor.h"
+#include "StringHelpers.h"
 
 void convertCsvToXmlFile(FILE* csvfilestream) {
     char csvfileline[1024];
