@@ -19,3 +19,4 @@ int tryToConvertStringToDecimal(const char* inputString, double* decimalValue) {
     }
     return 1;
 }
+#endif // DATATYPECONVERTOR_H
