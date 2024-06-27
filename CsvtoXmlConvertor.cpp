@@ -18,8 +18,8 @@ void write_trade_records_to_xml(const TradeRecords* objects, int objectCount, co
     log_to_file(outFile, "<TradeRecords>\n");
     for (int i = 0; i < objectCount; i++) {
         log_to_file(outFile, "\t<TradeRecord>\n");
-        log_to_file(outFile, "\t\t<SourceCurrency>%s</SourceCurrency>\n", objects[i].SC);
-        log_to_file(outFile, "\t\t<DestinationCurrency>%s</DestinationCurrency>\n", objects[i].DC);
+        log_to_file(outFile, "\t\t<SourceCurrency>%s</SourceCurrency>\n", objects[i].SrcCurrency);
+        log_to_file(outFile, "\t\t<DestinationCurrency>%s</DestinationCurrency>\n", objects[i].DestCurrency);
         log_to_file(outFile, "\t\t<Lots>%.2f</Lots>\n", objects[i].Lots);
         log_to_file(outFile, "\t\t<Price>%.2f</Price>\n", objects[i].Price);
         log_to_file(outFile, "\t</TradeRecord>\n");
@@ -72,6 +72,6 @@ void convertCsvToXmlFile(FILE* csvfilestream) {
         lineCount++;
     }
 
-    write_trade_records_to_xml(objects, objectCount, "output.xml");
+    write_trade_records_to_xml(records, recordCount, "output.xml");
 }
 
