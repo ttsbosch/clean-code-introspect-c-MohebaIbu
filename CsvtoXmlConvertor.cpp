@@ -8,7 +8,7 @@
 #include "logger.h"
 
 
-void write_trade_records_to_xml(const TR* objects, int objectCount, const char* filename) {
+void write_trade_records_to_xml(const TradeRecords* objects, int objectCount, const char* filename) {
     FILE* outFile = fopen(filename, "w");
     if (outFile == NULL) {
         log_error("Failed to open output file");
