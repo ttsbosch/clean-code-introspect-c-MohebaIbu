@@ -40,7 +40,7 @@ void convertCsvToXmlFile(FILE* csvfilestream) {
         if (!tryToConvertStringToDecimal(csvFileFields[2], &tradePrice)) {
             fprintf(stderr, "WARN: Trade price on line %d not a valid decimal: '%s'\n", lineCount + 1, csvFileFields[2]);
         }
-
+        LotSize = 100;
         strncpy(records[recordCount].SrcCurrency, csvFileFields[0], 3);
         strncpy(records[recordCount].DestCurrency, csvFileFields[0] + 3, 3);
         records[recordCount].Lots = tradeAmount / LotSize;
