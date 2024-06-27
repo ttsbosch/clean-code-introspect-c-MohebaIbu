@@ -3,10 +3,11 @@
 #include <string.h>
 #include <errno.h>
 #include "TradeRecord.h"
-#include "DataTypeConvertor.h"
+
 #include "StringHelpers.h"
 #include "logger.h"
 #include "IO_Operation.h"
+
 
 
 void convertCsvToXmlFile(FILE* csvfilestream) {
@@ -25,23 +26,23 @@ void convertCsvToXmlFile(FILE* csvfilestream) {
         }
 
         if (csvFieldCount != 3) {
-            fprintf(stderr, "WARN: Line %d malformed. Only %d field(s) found.\n", lineCount + 1, csvFieldCount);
+            log_warn(stderr, "WARN: Line %d malformed. Only %d field(s) found.\n", lineCount + 1, csvFieldCount);
             continue;
         }
 
         if (strlen(csvFileFields[0]) != 6) {
-            fprintf(stderr, "WARN: Trade currencies on line %d malformed: '%s'\n", lineCount + 1, csvFileFields[0]);
+            log_warn(stderr, "WARN: Trade currencies on line %d malformed: '%s'\n", lineCount + 1, csvFileFields[0]);
             continue;
         }
 
         int tradeAmount;
         if (!tryToConvertStringToInt(csvFileFields[1], &tradeAmount)) {
-            fprintf(stderr, "WARN: Trade amount on line %d not a valid integer: '%s'\n", lineCount + 1, csvFileFields[1]);
+            log_warn(stderr, "WARN: Trade amount on line %d not a valid integer: '%s'\n", lineCount + 1, csvFileFields[1]);
         }
 
         double tradePrice;
         if (!tryToConvertStringToDecimal(csvFileFields[2], &tradePrice)) {
-            fprintf(stderr, "WARN: Trade price on line %d not a valid decimal: '%s'\n", lineCount + 1, csvFileFields[2]);
+            log_warn(stderr, "WARN: Trade price on line %d not a valid decimal: '%s'\n", lineCount + 1, csvFileFields[2]);
         }
         
         strncpy(records[recordCount].SrcCurrency, csvFileFields[0], 3);
