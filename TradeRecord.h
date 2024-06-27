@@ -7,3 +7,5 @@ typedef struct {
     float Lots;
     double Price;
 } TradeRecords;
+
+#endif // TRADERECORD_H
