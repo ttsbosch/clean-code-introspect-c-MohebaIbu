@@ -5,7 +5,7 @@
 #include "TradeRecord.h"
 #include "DataTypeConvertor.h"
 #include "StringHelpers.h"
-
+#define LotSize 1000 
 void convertCsvToXmlFile(FILE* csvfilestream) {
     char csvfileline[1024];
     TradeRecords records[1024];
