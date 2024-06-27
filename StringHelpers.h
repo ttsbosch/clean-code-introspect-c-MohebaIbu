@@ -36,3 +36,4 @@ char** performStringSeperation(const char* inputString, char inputDelimiter) {
     free(token);
     return seperatedString;
 }
+#endif // STRINGHELPERS_H
