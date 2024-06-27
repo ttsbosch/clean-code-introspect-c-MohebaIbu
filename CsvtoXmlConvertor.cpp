@@ -5,13 +5,13 @@
 #include "TradeRecord.h"
 #include "DataTypeConvertor.h"
 #include "StringHelpers.h"
-#define LotSize 1000 
+
 void convertCsvToXmlFile(FILE* csvfilestream) {
     char csvfileline[1024];
     TradeRecords records[1024];
     int lineCount = 0;
     int recordCount = 0;
-
+    int LotSize = 100;
     while (fgets(csvfileline, sizeof(csvfileline), csvfilestream)) {
         char* csvFileFields[3];
         int csvFieldCount = 0;
@@ -40,7 +40,7 @@ void convertCsvToXmlFile(FILE* csvfilestream) {
         if (!tryToConvertStringToDecimal(csvFileFields[2], &tradePrice)) {
             fprintf(stderr, "WARN: Trade price on line %d not a valid decimal: '%s'\n", lineCount + 1, csvFileFields[2]);
         }
-        LotSize = 100;
+        
         strncpy(records[recordCount].SrcCurrency, csvFileFields[0], 3);
         strncpy(records[recordCount].DestCurrency, csvFileFields[0] + 3, 3);
         records[recordCount].Lots = tradeAmount / LotSize;
